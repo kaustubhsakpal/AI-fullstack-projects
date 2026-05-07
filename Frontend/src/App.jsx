@@ -19,9 +19,11 @@ function App() {
   useEffect(() => {
     prism.highlightAll()
   }, [])
-
+const api = axios.create({
+  baseURL: import.meta.env.BACKEND_URL
+})
   async function reviewCode() {
-    const response = await axios.post('http://localhost:3000/ai/get-review', { code })
+    const response = await api.post('/ai/get-review', { code })
     setReview(response.data)
   }
   

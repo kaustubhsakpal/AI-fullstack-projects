@@ -1,19 +1,29 @@
-import express from 'express'
-import { router } from './routes/ai.routes.js'
-import cros from 'cors'
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
-export const app = express()
+import { router } from "./routes/ai.routes.js";
 
-app.use(cros({
-    origin:"*"
-}))
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+export const app = express();
 
-app.use(express.json())
+app.use(cors({
+    origin: "*"
+}));
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+app.use(express.json());
 
-app.use('/ai', router) 
+app.use(express.static(path.join(__dirname, "../public")));
 
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+
+app.use("/ai", router);
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+});
